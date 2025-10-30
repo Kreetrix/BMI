@@ -12,7 +12,7 @@ public class View extends Application {
 
         Parent root = FXMLLoader.load(getClass().getResource("/view.fxml"));
 
-        primaryStage.setTitle("Dice Roller");
+        primaryStage.setTitle("Vladi's calculator");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }

@@ -27,8 +27,7 @@ pipeline{
             }
         }
 
-  stage('Publish') {
-        }
+ 
         stage('Code Coverage') {
             steps {
                 bat 'mvn jacoco:report'

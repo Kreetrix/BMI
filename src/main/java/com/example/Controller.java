@@ -1,9 +1,12 @@
 package com.example;
 
 import java.text.DecimalFormat;
+import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javafx.beans.property.StringProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -51,21 +54,40 @@ public class Controller {
         btnVi.setOnAction(e -> update(locals, 4));
 
         btnCalculate.setOnAction(e -> {
-            ResourceBundle rb = locals.getBundle();
-            calculate(rb);
+            calculate(locals);
         });
     }
 
+    private Map<String, String> localizedStrings;
+
+    // public void onCalculateClick(ActionEvent actionEvent) {
+    // try {
+    // double weight = Double.parseDouble(tfWeight.getText());
+    // double height = Double.parseDouble(tfHeight.getText()) / 100.0;
+    // double bmi = weight / (height * height);
+    // DecimalFormat df = new DecimalFormat("#0.00");
+    // lblResult.setText(localizedStrings.getOrDefault("result", "Your BMI is") + "
+    // " + df.format(bmi));
+    // // Save to database
+    // String language = Locale.getDefault().getLanguage(); // or store current
+    // locale
+    // BMIResultService.saveResult(weight, height, bmi, language);
+    // } catch (NumberFormatException e) {
+    // lblResult.setText(localizedStrings.getOrDefault("invalid", "Invalid input"));
+    // }
+    // }
+
     private void update(Locals locals, int language) {
         locals.setLang(language);
-        ResourceBundle rb = locals.getBundle();
-        lblWeight.setText(rb.getString("weight"));
-        lblHeight.setText(rb.getString("height"));
-        btnCalculate.setText(rb.getString("calculate"));
+        localizedStrings = locals.getLocalizedString();
+
+        lblWeight.setText(localizedStrings.getOrDefault("weight", "Weight"));
+        lblHeight.setText(localizedStrings.getOrDefault("height", "Height"));
+        btnCalculate.setText(localizedStrings.getOrDefault("calculate", "Calculate"));
 
     }
 
-    private void calculate(ResourceBundle rb) {
+    private void calculate(Locals locals) {
         try {
             double weight = Float.parseFloat(tfWeight.getText());
             double height = Float.parseFloat(tfHeight.getText());
@@ -73,9 +95,11 @@ public class Controller {
             height = height / 100;
             double bmi = weight / (height * height);
             DecimalFormat df = new DecimalFormat("#.##");
-            calculation.setText(rb.getString("bpmResults") + df.format(bmi));
+            String language = locals.getLangString();
+            BMIResultService.saveResult(weight, height, bmi, language);
+            calculation.setText(localizedStrings.getOrDefault("result", "Your BMI is") + " " + df.format(bmi));
         } catch (Exception e) {
-            calculation.setText(rb.getString("invalid"));
+            calculation.setText(localizedStrings.getOrDefault("invalid", "Invalid input"));
         }
 
     }

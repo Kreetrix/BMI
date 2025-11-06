@@ -1,12 +1,14 @@
 package com.example;
 
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class Locals {
     private static Locals instance;
     private ResourceBundle resourceBundle;
     private int language = 1;
+    private Map<String, String> localizedStrings;
 
     private Locals() {
         setLang(language);
@@ -21,6 +23,7 @@ public class Locals {
 
     private void local(String languageCode) {
         Locale locale = new Locale(languageCode);
+        localizedStrings = LocalizationService.getLocalizedStrings(locale);
         resourceBundle = ResourceBundle.getBundle("locals", locale);
     }
 
@@ -35,7 +38,25 @@ public class Locals {
         }
     }
 
+    public String getLangString() {
+        switch (this.language) {
+            case 1:
+                return "en";
+            case 2:
+                return "fr";
+            case 3:
+                return "ur";
+            case 4:
+                return "vi";
+        }
+        return null;
+    }
+
     public ResourceBundle getBundle() {
         return resourceBundle;
+    }
+
+    public Map<String, String> getLocalizedString() {
+        return localizedStrings;
     }
 }
